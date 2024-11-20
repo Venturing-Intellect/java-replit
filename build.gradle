@@ -1,0 +1,58 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'jacoco'
+}
+
+group = 'com.feedback'
+version = '1.0.0'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.postgresql:postgresql'
+    
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'org.mockito:mockito-core'
+    testImplementation 'com.h2database:h2'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    reports {
+        html.required = false
+        junitXml.required = false
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html {
+            required = true
+            destination file("build/reports/coverage/html")
+        }
+    }
+}
+
+bootJar {
+    archiveBaseName = 'feedback'
+    archiveVersion = '1.0.0'
+    archiveClassifier = ''
+}
+
+jar {
+    enabled = false
+}
